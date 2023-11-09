@@ -5,10 +5,11 @@ import Home from './routes/Home';
 import Profile from './routes/Profile';
 import Login from './routes/Login';
 import CreateAccount from './routes/CreateAccount';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import LoadingScreen from './components/LoadingScreen';
 import { auth } from './firebase';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const GlobalStyles = createGlobalStyle`
 ${reset};
@@ -22,6 +23,11 @@ font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, O
 }
 
 `;
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+`;
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +40,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <Wrapper>
       <GlobalStyles />
       {isLoading ? (
         <LoadingScreen />
@@ -42,15 +48,17 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="profile" element={<Profile />} />
+              <ProtectedRoute>
+                <Route path="/" element={<Home />} />
+                <Route path="profile" element={<Profile />} />
+              </ProtectedRoute>
             </Route>
             <Route path="login" element={<Login />} />
             <Route path="createaccount" element={<CreateAccount />} />
           </Routes>
         </Router>
       )}
-    </>
+    </Wrapper>
   );
 }
 
