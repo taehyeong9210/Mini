@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
+import { FirebaseError } from 'firebase/app';
 
 const Wrapper = styled.div`
   height: 100%;
@@ -77,6 +78,9 @@ const CreateAccount = () => {
       await updateProfile;
       navigate('/');
     } catch (e) {
+      if (e instanceof FirebaseError) {
+        console.log(e.code, e.message);
+      }
     } finally {
       setIsLoading(false);
     }

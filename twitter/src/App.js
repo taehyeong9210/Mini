@@ -47,11 +47,16 @@ function App() {
       ) : (
         <Router>
           <Routes>
-            <Route path="/" element={<Layout />}>
-              <ProtectedRoute>
-                <Route path="/" element={<Home />} />
-                <Route path="profile" element={<Profile />} />
-              </ProtectedRoute>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="/" element={<Home />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
             <Route path="login" element={<Login />} />
             <Route path="createaccount" element={<CreateAccount />} />
