@@ -5,11 +5,7 @@ const Home = () => {
   const logOut = () => {
     auth.signOut();
   };
-  return (
-    <div>
-      <button onClick={logOut}>Log Out</button>
-    </div>
-  );
+  return <div></div>;
 };
 
 export default Home;
