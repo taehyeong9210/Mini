@@ -1,7 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import React from 'react';
 import { useState } from 'react';
-import styled from 'styled-components';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
@@ -14,10 +13,6 @@ import {
   Input,
   Error,
 } from '../components/AuthComponents';
-
-const errors = {
-  'auth/email-already-in-use': 'that E-mail already exists',
-};
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -51,8 +46,7 @@ const CreateAccount = () => {
         email,
         password,
       );
-      console.log(credentials.user, { displayName: name });
-      await updateProfile;
+      await updateProfile(credentials.user, { displayName: name });
       navigate('/');
     } catch (e) {
       if (e instanceof FirebaseError) {
@@ -61,7 +55,6 @@ const CreateAccount = () => {
     } finally {
       setIsLoading(false);
     }
-    console.log(name, email, password);
   };
 
   return (
