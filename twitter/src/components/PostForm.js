@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 import { auth } from '../firebase';
+import { ref, uploadBytes } from 'firebase/storage';
 
 const Form = styled.form`
   display: flex;
@@ -86,12 +87,19 @@ const PostForm = () => {
 
     try {
       setIsLoading(true);
-      await addDoc(collection(db, 'tweets'), {
+      const doc = await addDoc(collection(db, 'tweets'), {
         tweets,
         createdAt: Date.now(),
         username: user.displayName || 'Anonymous',
         userId: user.uid,
       });
+      if (file) {
+        const locationRef = ref(
+          storage,
+          `tweets/${user.uid}-${user.displayName}/${doc.id}`,
+        );
+        await uploadBytes(locationRef, file);
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -103,6 +111,7 @@ const PostForm = () => {
     <>
       <Form onSubmit={onSubmit}>
         <TextArea
+          required
           rows={5}
           maxLength={180}
           onChange={onChange}
